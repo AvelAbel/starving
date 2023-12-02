@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         const val NOTIFICATION_ID = 1
         const val TIMER_VALUE_KEY = "timer_value"
     }
-
+//comment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
