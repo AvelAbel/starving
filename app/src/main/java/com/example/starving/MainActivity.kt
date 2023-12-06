@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         const val NOTIFICATION_ID = 1
         const val TIMER_VALUE_KEY = "timer_value"
     }
-//comment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         starvingTextView = findViewById(R.id.starvingTextView)
 
         increaseTimerButton.setOnClickListener {
-            timerValue += 5000
+            timerValue += 86400000
             saveTimerValue()
             updateTimerDisplay()
             updateNotification()
@@ -99,24 +99,20 @@ class MainActivity : AppCompatActivity() {
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
+
+        updateNotification() // Создайте уведомление при запуске
     }
 
     private fun updateNotification() {
         val notificationIcon = if (timerValue > 0) R.drawable.ic_notification else R.drawable.ic_notification_starving
-        val notificationTitle = if (timerValue > 0) "Timer Running" else "Starving"
-
-        val notificationText = if (timerValue > 0) {
-            "Time left: ${formatTime(timerValue)}"
-        } else {
-            ""
-        }
-
+        val notificationText = "Time left: ${formatTime(timerValue)}"
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(notificationIcon)
-            .setContentTitle(notificationTitle)
+            .setContentTitle("Timer Running")
             .setContentText(notificationText)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setOngoing(true)
+            .setOnlyAlertOnce(true)
 
         with(NotificationManagerCompat.from(this)) {
             notify(NOTIFICATION_ID, builder.build())
