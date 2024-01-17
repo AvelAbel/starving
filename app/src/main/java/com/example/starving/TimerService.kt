@@ -10,7 +10,7 @@ class TimerService : Service() {
 
     private var timerValue: Long = 5000 // Начальное значение таймера
     private val timer = Timer()
-    private val sharedPreferences by lazy { getSharedPreferences("TimerPrefs", MODE_PRIVATE) }
+    private val sharedPreferences by lazy { getSharedPreferences("timer_prefs", MODE_PRIVATE) }
 
     override fun onCreate() {
         super.onCreate()
@@ -30,18 +30,20 @@ class TimerService : Service() {
     }
 
     private fun increaseTimer() {
-        timerValue += 86400000
+        timerValue += 5000 // Увеличиваем на 24 часа
         saveTimerState()
-        // Обновление уведомления
+        sendBroadcast(Intent(ACTION_TIMER_UPDATED))
     }
 
+
     private fun saveTimerState() {
-        sharedPreferences.edit().putLong("TimeLeft", timerValue).apply()
+        sharedPreferences.edit().putLong(MainActivity.TIMER_VALUE_KEY, timerValue).apply()
     }
 
     private fun restoreTimerState() {
-        timerValue = sharedPreferences.getLong("TimeLeft", 5000)
+        timerValue = sharedPreferences.getLong(MainActivity.TIMER_VALUE_KEY, 5000)
     }
+
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -49,5 +51,6 @@ class TimerService : Service() {
 
     companion object {
         const val ACTION_INCREASE_TIMER = "action_increase_timer"
+        const val ACTION_TIMER_UPDATED = "action_timer_updated"
     }
 }
